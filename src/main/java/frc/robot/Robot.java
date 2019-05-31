@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * call your Autonomous and OperatorControl methods at the right time as
  * controlled by the switches on the driver station or the field controls.
  *
+ * 
  * <p>The VM is configured to automatically run this class, and to call the
  * functions corresponding to each mode, as described in the SampleRobot
  * documentation. If you change the name of this class or the package after

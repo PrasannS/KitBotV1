@@ -53,21 +53,10 @@ public class Robot extends SampleRobot {
 
   //Encoder declaration
   private Encoder encR = new Encoder(0, 1,false, Encoder.EncodingType.k4X);
-  private Encoder encL = new Encoder(0, 1,false, Encoder.EncodingType.k4X);
+  private Encoder encL = new Encoder(2, 3,false, Encoder.EncodingType.k4X);
 
 
-  encL.setDistancePerPulse(0.073631);
-  encL.setReverseDirection(true);
-  encL.setSamplesToAverage(7);
-
-  //getting distances for logger
-
-  String lDist = encL.getDistance()+"";
-  String rDist = encR.getDistance()+"";
-
-  encR.setDistancePerPulse(0.073631);
-  encR.setReverseDirection(true);
-  encR.setSamplesToAverage(7);
+  
 
 
   public Robot() {
@@ -80,6 +69,18 @@ public class Robot extends SampleRobot {
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto modes", m_chooser);
+    encL.setDistancePerPulse(0.073631);
+  encL.setReverseDirection(true);
+  encL.setSamplesToAverage(7);
+
+  //getting distances for logger
+
+  SmartDashboard.putNumber("distance L",encL.getDistance());
+  SmartDashboard.putNumber("distance R",encR.getDistance());
+
+  encR.setDistancePerPulse(0.073631);
+  encR.setReverseDirection(true);
+  encR.setSamplesToAverage(7);
   }
 
   /**
@@ -173,7 +174,11 @@ public class Robot extends SampleRobot {
       m_robotDrive.arcadeDrive(-m_stick.getY(), m_stick.getX());
       String s = -m_stick.getY()+" "+m_stick.getX();
       // The motors will be updated every 5ms
+      SmartDashboard.putNumber("distance L",encL.getRaw());
+  SmartDashboard.putNumber("distance R",encR.getRaw());
+
       Timer.delay(0.005);
+      
     }
   }
 

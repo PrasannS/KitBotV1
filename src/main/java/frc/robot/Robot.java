@@ -62,8 +62,8 @@ public class Robot extends SampleRobot {
 
   //getting distances for logger
 
-  String lDist = encL.getDistance();
-  String rDist = encR.getDistance();
+  String lDist = encL.getDistance()+"";
+  String rDist = encR.getDistance()+"";
 
   encR.setDistancePerPulse(0.073631);
   encR.setReverseDirection(true);

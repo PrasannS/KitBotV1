@@ -7,7 +7,11 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.PWMTalonSRX;
 import edu.wpi.first.wpilibj.PWMVictorSPX;
 import edu.wpi.first.wpilibj.SampleRobot;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
@@ -37,15 +41,16 @@ public class Robot extends SampleRobot {
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
 
-  private final SpeedControllerGroup l = new SpeedControllerGroup(new PWMVictorSPX(12), new PWMVictorSPX(13));
-  private final SpeedControllerGroup r = new SpeedControllerGroup(new PWMVictorSPX(14), new PWMVictorSPX(15));
+  private final SpeedControllerGroup l = new SpeedControllerGroup(new WPI_TalonSRX(0), new WPI_TalonSRX(1));
+  private final SpeedControllerGroup r = new SpeedControllerGroup(new WPI_TalonSRX(2), new WPI_TalonSRX(3));
 
-  private final DifferentialDrive m_robotDrive
-      = new DifferentialDrive(l, r);
+  private final DifferentialDrive m_robotDrive = new DifferentialDrive(l, r);
   private final Joystick m_stick = new Joystick(0);
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
+  Encoder encoder = new Encoder(sourceA, sourceB)
   public Robot() {
+    System.out.println("Gets to contructor");
     m_robotDrive.setExpiration(0.1);
   }
 
@@ -145,7 +150,7 @@ public class Robot extends SampleRobot {
     while (isOperatorControl() && isEnabled()) {
       // Drive arcade style
       m_robotDrive.arcadeDrive(-m_stick.getY(), m_stick.getX());
-
+      String s = -m_stick.getY()+" "+m_stick.getX();
       // The motors will be updated every 5ms
       Timer.delay(0.005);
     }
@@ -158,3 +163,4 @@ public class Robot extends SampleRobot {
   public void test() {
   }
 }
+

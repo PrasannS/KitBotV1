@@ -48,7 +48,28 @@ public class Robot extends SampleRobot {
   private final Joystick m_stick = new Joystick(0);
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
-  Encoder encoder = new Encoder(sourceA, sourceB)
+  //Encoder enc;
+//enc = new Encoder(0, 1, false, Encoder.EncodingType.k4X);
+
+  //Encoder declaration
+  private Encoder encR = new Encoder(0, 1,false, Encoder.EncodingType.k4X);
+  private Encoder encL = new Encoder(0, 1,false, Encoder.EncodingType.k4X);
+
+
+  encL.setDistancePerPulse(0.073631);
+  encL.setReverseDirection(true);
+  encL.setSamplesToAverage(7);
+
+  //getting distances for logger
+
+  String lDist = encL.getDistance();
+  String rDist = encR.getDistance();
+
+  encR.setDistancePerPulse(0.073631);
+  encR.setReverseDirection(true);
+  encR.setSamplesToAverage(7);
+
+
   public Robot() {
     System.out.println("Gets to contructor");
     m_robotDrive.setExpiration(0.1);

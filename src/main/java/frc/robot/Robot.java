@@ -47,6 +47,7 @@ public class Robot extends SampleRobot {
   private final DifferentialDrive m_robotDrive = new DifferentialDrive(l, r);
   private final Joystick m_stick = new Joystick(0);
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
+  private Gyro gyro;
 
   //Encoder enc;
 //enc = new Encoder(0, 1, false, Encoder.EncodingType.k4X);
@@ -66,21 +67,20 @@ public class Robot extends SampleRobot {
 
   @Override
   public void robotInit() {
+    
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto modes", m_chooser);
     encL.setDistancePerPulse(0.073631);
-  encL.setReverseDirection(true);
-  encL.setSamplesToAverage(7);
-
-  //getting distances for logger
-
-  SmartDashboard.putNumber("distance L",encL.getDistance());
-  SmartDashboard.putNumber("distance R",encR.getDistance());
-
-  encR.setDistancePerPulse(0.073631);
-  encR.setReverseDirection(true);
-  encR.setSamplesToAverage(7);
+    encL.setReverseDirection(true);
+    encL.setSamplesToAverage(7);
+    encL.start();
+    encR.start();
+    gyro = new AnalogGyro(1);     
+    //getting distances for logger
+    encR.setDistancePerPulse(0.073631);
+    encR.setReverseDirection(true);
+    encR.setSamplesToAverage(7);
   }
 
   /**
@@ -169,6 +169,7 @@ public class Robot extends SampleRobot {
   @Override
   public void operatorControl() {
     m_robotDrive.setSafetyEnabled(true);
+    gyro.reset();
     while (isOperatorControl() && isEnabled()) {
       // Drive arcade style
       m_robotDrive.arcadeDrive(-m_stick.getY(), m_stick.getX());
@@ -176,6 +177,7 @@ public class Robot extends SampleRobot {
       // The motors will be updated every 5ms
       SmartDashboard.putNumber("distance L",encL.getRaw());
   SmartDashboard.putNumber("distance R",encR.getRaw());
+  SmartDashboard.putNumber("angle",gyro.getAngle());
 
       Timer.delay(0.005);
       

@@ -48,6 +48,7 @@ public class Robot extends SampleRobot {
   private final Joystick m_stick = new Joystick(0);
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
   private Gyro gyro;
+  AHRS ahrs;
 
   //Encoder enc;
 //enc = new Encoder(0, 1, false, Encoder.EncodingType.k4X);
@@ -63,6 +64,54 @@ public class Robot extends SampleRobot {
   public Robot() {
     System.out.println("Gets to contructor");
     m_robotDrive.setExpiration(0.1);
+    
+    try {
+
+			/***********************************************************************
+
+			 * navX-MXP:
+
+			 * - Communication via RoboRIO MXP (SPI, I2C, TTL UART) and USB.            
+
+			 * - See http://navx-mxp.kauailabs.com/guidance/selecting-an-interface.
+
+			 * 
+
+			 * navX-Micro:
+
+			 * - Communication via I2C (RoboRIO MXP or Onboard) and USB.
+
+			 * - See http://navx-micro.kauailabs.com/guidance/selecting-an-interface.
+
+			 * 
+
+			 * Multiple navX-model devices on a single robot are supported.
+
+			 ************************************************************************/
+
+            ahrs = new AHRS(SPI.Port.kMXP); 
+
+        } catch (RuntimeException ex ) {
+
+            DriverStation.reportError("Error instantiating navX MXP:  " + ex.getMessage(), true);
+
+        }
+    
+    static final double kP = 0.03;
+
+    static final double kI = 0.00;
+
+    static final double kD = 0.00;
+
+    static final double kF = 0.00;
+
+    
+
+    static final double kToleranceDegrees = 2.0f;    
+
+    
+
+    static final double kTargetAngleDegrees = 90.0f;
   }
 
   @Override
@@ -81,6 +130,7 @@ public class Robot extends SampleRobot {
     encR.setDistancePerPulse(0.073631);
     encR.setReverseDirection(true);
     encR.setSamplesToAverage(7);
+    ahrs.zeroYaw();
   }
 
   /**
@@ -176,9 +226,9 @@ public class Robot extends SampleRobot {
       String s = -m_stick.getY()+" "+m_stick.getX();
       // The motors will be updated every 5ms
       SmartDashboard.putNumber("distance L",encL.getRaw());
-  SmartDashboard.putNumber("distance R",encR.getRaw());
-  SmartDashboard.putNumber("angle",gyro.getAngle());
-
+     SmartDashboard.putNumber("distance R",encR.getRaw());
+  SmartDashboard.putNumber("angle",ahrs.getAngle());
+    SmartDashboard.putNumber("angularvelo",ahrs.getRawGyroX());
       Timer.delay(0.005);
       
     }
